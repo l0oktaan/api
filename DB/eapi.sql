@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2018 at 03:22 PM
+-- Generation Time: Jun 20, 2018 at 04:45 PM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -42,7 +42,119 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2018_06_18_121332_create_products_table', 1),
-(4, '2018_06_18_121407_create_reviews_table', 1);
+(4, '2018_06_18_121407_create_reviews_table', 1),
+(5, '2016_06_01_000001_create_oauth_auth_codes_table', 2),
+(6, '2016_06_01_000002_create_oauth_access_tokens_table', 2),
+(7, '2016_06_01_000003_create_oauth_refresh_tokens_table', 2),
+(8, '2016_06_01_000004_create_oauth_clients_table', 2),
+(9, '2016_06_01_000005_create_oauth_personal_access_clients_table', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_access_tokens`
+--
+
+CREATE TABLE `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `client_id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_access_tokens`
+--
+
+INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
+('5f567adaf58825599460051a73e5fb736c1c69e0fa170591d34f798e5ca77d795f5ac08395088cca', 1, 2, NULL, '[]', 0, '2018-06-20 06:31:29', '2018-06-20 06:31:29', '2019-06-20 13:31:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_auth_codes`
+--
+
+CREATE TABLE `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_clients`
+--
+
+CREATE TABLE `oauth_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_clients`
+--
+
+INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Laravel Personal Access Client', 'lKx8CeG9GJ7lwaNRwbt2QUeKAP9cEZPozmVZmJEX', 'http://localhost', 1, 0, 0, '2018-06-20 06:25:08', '2018-06-20 06:25:08'),
+(2, NULL, 'Laravel Password Grant Client', 'zvumxaLfDVGfGrf8MaIKbB1vYYIPi1YSM2Zaj08x', 'http://localhost', 0, 1, 0, '2018-06-20 06:25:08', '2018-06-20 06:25:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_personal_access_clients`
+--
+
+CREATE TABLE `oauth_personal_access_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_personal_access_clients`
+--
+
+INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '2018-06-20 06:25:08', '2018-06-20 06:25:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_refresh_tokens`
+--
+
+CREATE TABLE `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_refresh_tokens`
+--
+
+INSERT INTO `oauth_refresh_tokens` (`id`, `access_token_id`, `revoked`, `expires_at`) VALUES
+('c7047d372bd9f9bca175205d753592eaa615ff8a5b33d6206a41b3bd985f7f10f9c6babf00b179fa', '5f567adaf58825599460051a73e5fb736c1c69e0fa170591d34f798e5ca77d795f5ac08395088cca', 0, '2019-06-20 13:31:29');
 
 -- --------------------------------------------------------
 
@@ -81,7 +193,7 @@ INSERT INTO `products` (`id`, `name`, `detail`, `price`, `stock`, `discount`, `c
 (1, 'quibusdam', 'Ut nam maiores porro excepturi. Qui est aut quis animi quam vel labore. Rem voluptatem eaque sequi totam quia recusandae et. Minus et minus maxime quae.', 794, 7, 4, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
 (2, 'perferendis', 'Vitae quod itaque quia. Velit pariatur totam et sint ut reprehenderit error. Quam maxime hic vel consequatur itaque omnis perferendis. Qui non quidem dolores molestiae harum qui.', 976, 0, 17, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
 (3, 'enim', 'Voluptas doloribus illum et iure necessitatibus. Saepe architecto ducimus ipsum atque rem dolore voluptatem. Quos minus nam ad cumque doloribus quam.', 987, 1, 21, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
-(4, 'ut', 'Dignissimos et dolor sed qui. Ad quo suscipit dolor qui assumenda consequatur odio. In perferendis ducimus quidem illo fugit excepturi.', 618, 2, 26, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
+(4, 'ut', 'Dignissimos et dolor sed qui. Ad quo suscipit dolor qui assumenda consequatur odio. In perferendis ducimus quidem illo fugit excepturi.', 618, 0, 26, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
 (5, 'qui', 'Asperiores cum nobis quia neque sit ut. Veniam qui eveniet mollitia libero ut. Temporibus deleniti commodi aut et nisi adipisci. Dolores in aliquid aut dolores occaecati. Ut consequatur sit provident vel.', 388, 7, 23, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
 (6, 'corrupti', 'Sunt dolor velit ut et non mollitia et quis. Consequatur veritatis inventore quia velit modi dolorem. Culpa quo molestiae minima itaque. Natus voluptatem est dolor quia in beatae non architecto.', 754, 2, 14, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
 (7, 'ex', 'Sint non nisi blanditiis eaque nam quos facilis. Non ut fugit voluptatem velit. Rerum vel esse alias. Et consequatur non aut inventore omnis. Dolorem eligendi magnam ut adipisci quo.', 362, 9, 22, '2018-06-18 06:15:24', '2018-06-18 06:15:24'),
@@ -126,8 +238,7 @@ INSERT INTO `products` (`id`, `name`, `detail`, `price`, `stock`, `discount`, `c
 (46, 'eum', 'Doloribus quasi sed magnam sed. Officia maiores et velit deleniti earum. Ipsum ea nemo amet et tempora aspernatur fugiat velit.', 885, 4, 19, '2018-06-18 06:15:25', '2018-06-18 06:15:25'),
 (47, 'et', 'Voluptatem illum ut ratione. Voluptas esse doloribus nam est ipsa nihil nobis quae. Architecto quis quas eveniet. Est sed optio mollitia ipsa ratione possimus molestiae.', 134, 3, 15, '2018-06-18 06:15:25', '2018-06-18 06:15:25'),
 (48, 'laudantium', 'Voluptas at autem dolor consequatur consequuntur nesciunt. Molestiae ut dolorem itaque in consectetur id. Alias omnis modi repudiandae dolorem. Nam animi eaque qui tempore numquam officia et recusandae. Incidunt suscipit nisi quis laboriosam amet enim.', 532, 8, 10, '2018-06-18 06:15:25', '2018-06-18 06:15:25'),
-(49, 'fugit', 'Corrupti id at ut in voluptate voluptate. Quod est omnis eligendi. Ad eos suscipit tenetur accusamus voluptatibus odio quaerat. Ut reiciendis eos non dolores unde dicta.', 834, 8, 6, '2018-06-18 06:15:25', '2018-06-18 06:15:25'),
-(50, 'possimus', 'Aliquam distinctio ut soluta qui reprehenderit. Qui commodi error non est exercitationem dolorem ratione aut. Illum aut voluptatem sed dolor quia. Ipsum eius rerum iste voluptas reiciendis quod doloremque.', 756, 8, 8, '2018-06-18 06:15:25', '2018-06-18 06:15:25');
+(51, 'iPhone X Updated', 'Top Smart Phone Updated', 100, 20, 5, '2018-06-20 06:59:15', '2018-06-20 07:17:07');
 
 -- --------------------------------------------------------
 
@@ -166,7 +277,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (14, 37, 'Prof. Louvenia Harvey', 'Voluptas quia omnis incidunt assumenda. Voluptas veritatis quod at sint fugiat tenetur voluptatem saepe. Ut est ut vel tempora voluptatem et aut.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (15, 42, 'Dr. Lacy Koss IV', 'Consequatur distinctio et temporibus omnis consequatur. Est alias ipsa sit quia et id dolor. Recusandae voluptatum tempore dolore velit totam ut. Quos perferendis quia minus commodi aperiam assumenda omnis.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (16, 35, 'Miss Michelle Waelchi I', 'Ea aspernatur et quia nesciunt dolores facilis saepe nisi. Repudiandae rerum qui sint. Ut rerum debitis cum facere.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(17, 50, 'Leta Toy', 'Molestiae dignissimos et enim sint tenetur ad. Est harum molestias maxime officia quia rerum. Illum quam exercitationem quaerat voluptas dolore inventore.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (18, 25, 'Abbigail Runolfsson', 'Quam voluptatem ipsum eius et atque. Et tenetur quia a a. Natus eaque ex eligendi qui.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (19, 26, 'Kaleb Hahn DVM', 'Voluptatum voluptatibus quis adipisci consectetur soluta delectus. Inventore vitae totam nihil porro. Eius debitis odio repellendus. Exercitationem odio aspernatur enim in debitis voluptatem. Qui qui culpa ut est.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (20, 45, 'Eddie Baumbach', 'Et et voluptas quia dolorem pariatur. Voluptas non est qui magnam et illo. Consectetur asperiores voluptatem accusamus iusto totam qui.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -189,7 +299,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (37, 1, 'Mr. Nickolas VonRueden', 'Ut quis expedita aliquid sit ea illo. Consequatur ipsam officiis sed odit similique animi eaque. Optio ex ut voluptatum velit totam quibusdam ipsam.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (38, 47, 'Prof. Alek Collier V', 'Culpa qui nulla fuga rerum laudantium omnis. Consequatur enim officia inventore autem. Necessitatibus corporis sit et magni necessitatibus dignissimos voluptatem. Architecto non explicabo saepe vel eligendi.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (39, 24, 'Mr. Paxton Ernser', 'Esse dolor dolorum est a molestias. Qui inventore tempora voluptatem eveniet officia impedit vel.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(40, 50, 'Mr. Garett Anderson V', 'In eveniet similique ab. Non omnis quia asperiores dolor debitis. Qui vitae est consectetur sed occaecati modi. Odio soluta quod consequuntur aut.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (41, 24, 'Beau Turcotte', 'Dolores magnam harum distinctio reiciendis quia minus vero. Magnam sint voluptas et ut. Qui deleniti explicabo repudiandae est sint et.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (42, 18, 'Gertrude Welch', 'Nisi labore pariatur consequatur aliquid reiciendis at. Eum quo deserunt deleniti libero eius est. Sequi ea voluptatem omnis rerum non ea quia. Occaecati aliquam est nisi dolorem atque odio repellendus.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (43, 43, 'Nannie Bahringer', 'Exercitationem ipsum laborum sed voluptate illum. Expedita ut sint doloremque modi. Harum laboriosam et aut est voluptatem.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -234,7 +343,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (82, 22, 'Freddie Von IV', 'Nihil consequatur suscipit dolore eos sequi. Maxime totam et ea nostrum. Et placeat quia id saepe. Et quibusdam quod fugiat rerum dolorem.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (83, 10, 'Earline Carter', 'In ut voluptatem est temporibus porro ut. Explicabo voluptate aspernatur vel eaque excepturi possimus dolores reprehenderit. Consectetur ut est asperiores autem sit corrupti nulla.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (84, 27, 'Dr. Harrison Bednar DDS', 'Magnam voluptatem quo dolore qui voluptatem omnis enim. Nemo perspiciatis et molestias veritatis atque quia ab. Neque quibusdam laudantium ut occaecati.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(85, 50, 'Chandler Wehner', 'Deserunt non omnis qui itaque in illum sunt sit. Aut asperiores molestiae accusantium sed. Et est modi mollitia.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (86, 30, 'Aisha Jakubowski', 'Eum dolore laudantium libero nisi. Sint ipsum laudantium repellat eligendi error reiciendis ducimus. Cumque illo aut dolor ullam.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (87, 22, 'Mrs. Henriette Toy', 'Nihil nihil ratione labore dolor. Consectetur temporibus magni aut amet voluptatem minus. Quod ea consectetur amet harum sit repellat.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (88, 46, 'Dr. Vernice Howell', 'Minima voluptatem tempore et repellat. Consectetur doloribus qui id et non. Accusantium suscipit labore distinctio sint. Autem placeat illo nisi vitae ut dolores.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -251,7 +359,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (99, 33, 'Dr. Alexandrea Cronin', 'Sit omnis ut non sit soluta. Laudantium nisi velit accusantium non praesentium eum. Et omnis ex voluptate rerum dolorem velit sit. Est expedita quisquam totam voluptas.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (100, 26, 'Miss Jennifer DuBuque V', 'Repudiandae laboriosam mollitia sequi atque alias amet ex. Id veniam ut aut ut. Occaecati quia sequi nostrum eos incidunt ratione. Laborum deserunt dolorum sequi officiis deserunt nihil dicta.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (101, 41, 'Keara Gottlieb', 'Sit dolores dolorem consequatur quia dolores itaque eos exercitationem. Officia excepturi perferendis illo animi beatae cumque.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(102, 49, 'Dr. Franz Price', 'Sed quia sit est quas. Molestiae sint aspernatur ea dolores eos facilis. Explicabo velit fugiat iste quod dolor.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (103, 34, 'Elbert Sporer', 'Non aliquid adipisci eaque nemo incidunt. Illum consequuntur vel omnis voluptate dolor et enim qui. Sed neque est et iure. Necessitatibus omnis non et ut.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (104, 45, 'Mrs. Aniya Considine', 'Quaerat quam omnis quia. Consequatur id debitis est temporibus reprehenderit aut magnam. Sit aliquid sed id voluptas enim dicta minus. Minima est sed dolorem quibusdam nihil vitae.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (105, 6, 'Miss Adell Gaylord', 'Voluptatibus id necessitatibus mollitia maxime. Fugiat illo distinctio qui aut qui voluptatem tempore. Dolorem beatae architecto consequatur.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -276,7 +383,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (124, 43, 'Ms. Zoie Vandervort', 'Perferendis et atque vel ut quia pariatur explicabo consectetur. Ut similique recusandae nobis maiores temporibus consequatur qui. Libero error sit et excepturi. Dolorum voluptas et excepturi autem dolorem. Commodi deserunt iste est sapiente dolorem qui officiis omnis.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (125, 21, 'Trevion Flatley', 'Tempora molestiae facere quam ea minima molestiae. Ullam aut nulla perspiciatis laboriosam libero reiciendis aspernatur vero. Quas ea placeat cumque quisquam totam ducimus aliquam vel. Nihil voluptatem et dolorem maxime ab ut recusandae.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (126, 22, 'Ms. Alfreda Green Sr.', 'Qui vero saepe reprehenderit repellendus animi. Numquam quos ut ea sit nulla possimus debitis. Et quis ut debitis sed laudantium tempora sunt. Provident sit corrupti quis qui.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(127, 50, 'Kristina Herzog', 'Est fugit rerum aliquam dignissimos neque. Sed voluptatem enim dolore nesciunt suscipit animi suscipit. Excepturi dolor sunt perferendis sit error ipsum.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (128, 8, 'Arnulfo Barrows', 'Illum adipisci saepe voluptas saepe. Illum nesciunt sint omnis nam. Et adipisci voluptatem quo dignissimos hic enim. Debitis eos pariatur officia nihil dolores libero adipisci qui.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (129, 37, 'Camryn Witting', 'Vero ea sint id assumenda tempore sunt numquam. Est veniam in quas dignissimos corrupti nostrum. Maiores et dolores accusamus.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (130, 1, 'Harrison Lockman', 'Voluptatem nihil ab ullam adipisci quia. Id alias impedit ducimus similique alias sit. Voluptatibus dolor officia aut rerum ad deserunt id.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -284,7 +390,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (132, 24, 'Mrs. Beatrice Krajcik Jr.', 'Iure facere labore optio nemo quod. Quia omnis provident qui natus in ex reprehenderit eveniet. Corporis atque sit iste recusandae dolores eligendi voluptates.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (133, 35, 'Abner Swaniawski', 'Pariatur et quis voluptas quam. Aut delectus atque delectus facere asperiores vel. Voluptatem veniam placeat corporis fuga.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (134, 32, 'Eldon Spencer', 'Voluptates quae voluptatem unde est voluptates mollitia. Omnis dolorem et eum quasi qui. Neque qui consectetur expedita et ipsum natus omnis accusamus.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(135, 49, 'Cullen Kuhic', 'Quo eligendi nisi sequi velit deserunt enim voluptatem. Magnam nam quia quos tempore debitis cupiditate. Ut et aut quos eveniet ut dicta.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (136, 38, 'Lera Upton', 'Dolorem doloremque et ut dolorem qui quis itaque. Inventore tempora quidem ea et earum harum ducimus voluptate. Sint ipsum vero mollitia. Eligendi deserunt autem repudiandae aut sunt.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (137, 27, 'Amari Lang', 'Et nesciunt veritatis esse ut possimus. Doloremque voluptas eaque a quidem doloribus atque. Necessitatibus nihil ad mollitia aliquam earum et ut.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (138, 36, 'Leslie Sipes', 'Quia et repellat inventore rerum laborum nisi ipsum. Numquam voluptas dolores minus nihil saepe a. Ut est et officiis pariatur. Accusantium saepe architecto accusantium neque porro eligendi molestias voluptatum. Delectus totam deleniti ea dolorum nobis et.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -293,7 +398,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (141, 38, 'Dr. Roosevelt Torp', 'Dolores et omnis tempore inventore eos. Deserunt velit in ducimus pariatur quisquam non minus quia.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (142, 5, 'Robbie Zemlak', 'Sunt et dolorem exercitationem officiis ut accusamus placeat. Ut aut et earum tenetur ab aliquid eos. Vero sapiente consequatur unde quidem.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (143, 2, 'Miss Shany Tillman', 'A ut est laudantium aliquid ipsa optio consequatur adipisci. Aut soluta adipisci sapiente ipsum deleniti officiis autem. Voluptatem culpa quae et omnis.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(144, 49, 'Mr. Chelsey Hintz', 'Neque corporis assumenda vel dolorem sit tempore. Et sit vel optio. Pariatur corporis dolor voluptas quae vero adipisci dolorem.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (145, 31, 'Nadia Kuhic', 'Eligendi et amet possimus dolorem quia debitis. Aut aliquam voluptas sint voluptatibus sequi vel suscipit et. Nisi et aut omnis et incidunt corporis sit. Quia saepe aspernatur reiciendis nam ratione.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (146, 28, 'Tevin Brakus Jr.', 'Possimus odio magnam provident. Ad fugiat assumenda dolores reiciendis. Voluptatem soluta possimus ipsum aut a temporibus accusamus.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (147, 6, 'Dr. Brandy Heidenreich', 'Facere sit non perferendis illum eligendi aliquid quia. Deserunt voluptatem eum quia molestias eaque ipsum. In nulla incidunt eos non qui mollitia. Doloremque a beatae aut inventore quod.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -316,7 +420,6 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (164, 42, 'Prof. Haley Ullrich Sr.', 'Dolorem corrupti consequatur molestiae sit. Dolores provident aut modi voluptatum quo impedit nihil reiciendis. Aliquid qui rerum quia sunt aliquam nostrum autem. Maiores cum est maxime magni voluptas velit in.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (165, 28, 'Larry Runte', 'Est reiciendis deserunt rerum. Sit aliquid libero ea eum. Laboriosam aut itaque voluptatem. Non aperiam dolorum in et.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (166, 47, 'Mr. Rahul Parisian Jr.', 'Voluptatum qui dolore impedit consequatur eos illo. Deleniti velit et quam in praesentium voluptas. Tempore quae blanditiis aliquid temporibus modi repellat. Id aut occaecati et nulla voluptatem cumque distinctio.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(167, 50, 'Janice Murray', 'Quis libero dicta quam dolore id. Cupiditate eos excepturi ipsum assumenda. Atque iure voluptate eaque. Ducimus quibusdam voluptatem sed ex ex tempore at.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (168, 30, 'Claud Bogisich IV', 'Similique error perspiciatis consequatur iusto aperiam quia voluptas. Dolor aut vel accusantium aut qui et. Numquam ratione dolores corporis delectus. Fugiat saepe sed architecto error facilis in quod. Et enim aspernatur temporibus quisquam minima.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (169, 38, 'Prof. Favian Hintz', 'Ut et a repudiandae dolorem architecto. Blanditiis delectus voluptatum omnis aut eum. Explicabo libero qui distinctio vitae molestias eligendi et.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (170, 44, 'Eula Nitzsche', 'Veniam rerum ipsum nemo cumque non tempore ratione. Earum blanditiis molestiae et et qui excepturi magnam. Aut omnis quisquam placeat aliquam numquam.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -356,15 +459,15 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (204, 13, 'Kira Feeney', 'Omnis commodi tempore sed dolorem dolor illo laudantium sed. Minus sit impedit ut nihil ex dolor id. Non soluta perferendis dolor qui quam aut.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (205, 12, 'Prof. Kamren Fahey', 'Expedita dolorem sint aut possimus rem. Non pariatur et vel nisi aut a omnis. Labore veniam voluptas quasi accusamus voluptas dolor. Molestiae quaerat placeat soluta et aut. Animi dolor dolorem temporibus sit nam quaerat totam animi.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (206, 45, 'Dr. Janiya Hessel', 'Et dicta ea voluptatem assumenda et earum. Blanditiis quia inventore nobis doloribus non. Qui enim eius modi accusamus.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(207, 14, 'Dovie Ondricka', 'Ut id quia ut dolor consectetur voluptate veniam quaerat. Tenetur modi optio optio quis sed autem itaque nihil. Cum minus dolor similique at. Tenetur accusamus neque quis voluptatem odit. Porro id quae laborum.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48');
-INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `created_at`, `updated_at`) VALUES
+(207, 14, 'Dovie Ondricka', 'Ut id quia ut dolor consectetur voluptate veniam quaerat. Tenetur modi optio optio quis sed autem itaque nihil. Cum minus dolor similique at. Tenetur accusamus neque quis voluptatem odit. Porro id quae laborum.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (208, 13, 'Elinore Kertzmann', 'Eos est mollitia labore cum explicabo magnam iusto quia. Vitae odio eveniet itaque et sunt qui quibusdam. Et corrupti inventore quis aperiam quasi est repellat.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (209, 20, 'Albin Corkery', 'Tenetur voluptatibus molestias quos et qui. Ut fugiat et quasi ut ut. Est exercitationem sed delectus itaque. Expedita error vel earum expedita.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (210, 21, 'Earnestine Parker', 'Quidem culpa ipsa officiis et qui voluptatibus et. Ea ipsum qui molestiae enim. Blanditiis sapiente tenetur illum non eveniet rerum. Cumque voluptatem cumque repudiandae quo.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (211, 19, 'Dashawn Orn', 'Quia laboriosam fugiat voluptas. Sit placeat quis libero non reiciendis qui laboriosam. Autem in consequatur deserunt molestias placeat. Explicabo et quia nisi ea omnis distinctio esse.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (212, 17, 'Jocelyn Murphy', 'Iure harum numquam itaque necessitatibus praesentium ipsa. Voluptatum et necessitatibus aut impedit. Maxime fuga est dolor id. Accusantium qui doloribus ipsum ea.', 1, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (213, 13, 'Kristina Maggio', 'Aut iusto sed qui est non. Quo ratione eveniet id est vitae eos. Quo praesentium deserunt autem. Earum enim consequatur est consequatur officia ut.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(214, 18, 'Rita Trantow', 'Nulla ut perferendis inventore sint rem aut. Omnis necessitatibus possimus exercitationem hic beatae et et. Commodi eaque nostrum et provident fuga quia dolore sed. Quidem saepe non vero modi non.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
+(214, 18, 'Rita Trantow', 'Nulla ut perferendis inventore sint rem aut. Omnis necessitatibus possimus exercitationem hic beatae et et. Commodi eaque nostrum et provident fuga quia dolore sed. Quidem saepe non vero modi non.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48');
+INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `created_at`, `updated_at`) VALUES
 (215, 23, 'Mr. Cruz Ritchie III', 'Ab occaecati sunt porro enim natus. Nam recusandae nobis sed magnam dolorem molestiae sint omnis. Quis possimus expedita saepe aut molestiae totam et adipisci.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (216, 44, 'Mrs. Allie Runolfsson I', 'Aliquid saepe et ut repellendus rerum. Architecto dolorem quidem incidunt voluptas eos perferendis ut fuga. Veritatis dolores molestiae voluptatibus nisi adipisci. Qui veritatis vitae rerum mollitia magni soluta ut laudantium. Totam porro iusto ut.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (217, 2, 'Valentina Wilderman', 'Velit omnis ut ipsam suscipit et commodi repellendus. Molestiae suscipit ea dicta eius consequatur maiores veritatis atque. Provident minus quia rerum ratione provident et vel nostrum. Et magnam non harum fugit id.', 2, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -439,11 +542,8 @@ INSERT INTO `reviews` (`id`, `product_id`, `customer`, `review`, `star`, `create
 (286, 1, 'Philip Lockman', 'Dolor in fugiat omnis corporis adipisci delectus enim. Assumenda facere dolores praesentium. Cumque fuga sunt ab eum. Perferendis exercitationem explicabo corporis est.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (287, 18, 'Thomas Connelly', 'Consequatur dolor dolor consequuntur et quaerat asperiores. Recusandae voluptatem voluptate enim et impedit quis incidunt. Eos tempora blanditiis soluta vel et facere consequatur. Eaque eligendi suscipit et architecto rerum pariatur.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (288, 20, 'Ted Kutch Jr.', 'Est praesentium corporis hic maiores enim. Quasi eos repudiandae laborum quas sed. Doloribus commodi nihil sunt enim quibusdam aperiam. Quae consequatur vel necessitatibus culpa tempore.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(289, 49, 'Maxine Oberbrunner', 'Dolor ut ullam ullam earum rem. In quia veritatis vitae sequi aut fuga. Qui et earum sunt cupiditate. Tempora alias veniam dolores officiis incidunt autem.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (290, 25, 'Dr. Darion West', 'Rerum voluptatem ipsum beatae non recusandae beatae quos. Et non dolor ullam reprehenderit et omnis rerum. Nemo consequatur aperiam excepturi qui ea et rerum voluptatem. Ut vitae nulla et eum iusto.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(291, 49, 'Garnet Hamill', 'Voluptatem saepe aspernatur ullam provident inventore error iste. Qui blanditiis deserunt dolor aut.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (292, 48, 'Molly Miller', 'Et dolore in et temporibus sit. Consequuntur consectetur est repellat. Quibusdam rem quia enim delectus corrupti voluptatibus est et.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
-(293, 50, 'Otho Watsica', 'Aut corrupti quia voluptatem consequatur eos mollitia. Laborum quaerat fugiat tempora labore. Amet dolor aperiam iste.', 5, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (294, 4, 'Jaden Lowe', 'Rerum dolorem voluptates sunt cumque sit omnis eos dolorem. Maiores modi et ut architecto neque. Dolor veritatis et ullam rerum voluptatum laboriosam.', 4, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (295, 13, 'Maia Bailey', 'Laudantium est voluptatem molestias itaque nisi. Repellat aliquid veritatis consequuntur perferendis est voluptatibus. Porro aspernatur unde quasi minus amet.', 0, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
 (296, 27, 'Mitchel Steuber II', 'Sunt sit sit perspiciatis id. Inventore id sapiente nesciunt architecto cum id. Dolore tenetur culpa enim ut.', 3, '2018-06-18 06:18:48', '2018-06-18 06:18:48'),
@@ -469,6 +569,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'looktaan', 'll@c.com', '$2y$10$7w3zIvHHPRgQ06jwW6gTRuXERBPjtf1Ne6MjPZCMAjfeeUPbozk32', NULL, '2018-06-20 06:15:43', '2018-06-20 06:15:43');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -477,6 +584,40 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `oauth_access_tokens`
+--
+ALTER TABLE `oauth_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_access_tokens_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_auth_codes`
+--
+ALTER TABLE `oauth_auth_codes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_clients_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_personal_access_clients_client_id_index` (`client_id`);
+
+--
+-- Indexes for table `oauth_refresh_tokens`
+--
+ALTER TABLE `oauth_refresh_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -512,13 +653,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -530,7 +683,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
