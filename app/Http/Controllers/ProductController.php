@@ -94,8 +94,10 @@ class ProductController extends Controller
     {
         $request['detail'] = $request->description;
         unset($request['description']);
-;        $product->update($request->all());
-        //return $product; //$request->all();
+;       $product->update($request->all());
+        return response([
+            'data' => new ProductResource($product)
+        ],201);
     }
 
     /**
@@ -106,6 +108,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response(null,Response::HTTP_NO_CONTENT);
     }
 }
